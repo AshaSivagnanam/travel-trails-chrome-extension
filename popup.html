@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Getting Started Extension's Popup</title>
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+    <script src="dist/js/jquery-2.0.3.min.js"></script>
+    <script src="dist/js/angular.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script src="popup.js"></script>
+    <style type="text/css">
+      body {
+        height: 40em;
+        width: 40em;
+        overflow: scroll;
+        /*background-color: rgba(0, 0, 0, 0.1);*/
+        font-family: "Amadeus", Amadeus-Regular;
+        font-size : 16px !important;
+      }
+      ::-webkit-scrollbar {
+        width: 0.35em;
+        height: 0.35em;
+        -webkit-appearance: none;
+      }   
+     ::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        background-color: rgba(65, 111, 195, 1);
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+      }
+      .page-header {
+        margin: 0;
+        padding: 0;
+        border: 0px;
+      }
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        /*background-color: rgba(209, 143, 220, 0.5);*/
+        background-color: rgba(65, 111, 195, 1);
+
+        padding : 0 !important;
+        border-radius: 3px;
+        color: white;
+      }
+
+      li {
+          float: left;
+          padding: 0 !important;
+      }
+
+      li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          color: white !important;
+      }
+
+      li a:hover:not(.active) {
+          background-color: rgba(38, 158, 227, 0.7);
+          text-decoration: none;
+          color: white !important;
+      }
+      li.active a {
+        text-decoration: none;
+        font-weight: 600;
+        color: white !important;
+      }
+
+      .active {
+          background-color: rgba(38, 158, 227, 0.7);
+      }
+      .page-header {
+        border-bottom: 1px solid #e5e5e5;
+        /*/background-image: url(images/baby-foot-mini.png);*/
+        background-repeat: repeat;
+      }
+      .pad-top {
+        padding-top: 3%;
+        margin-top : 5%;
+      }
+      #create-trail {
+        height: 90%;
+        width: 70%;
+        left: 15%;
+        position: absolute;
+      }
+      .content {
+        padding-top : 3% !important;
+      }
+    </style>
+  </head>
+  <body ng-app="myApp">
+    <div class="container" ng-controller="myController">
+      <div class="page-header" style="background-image:url({{icon}});background-size:7%;font-weight:800;">
+        <h2 class="text-primary text-center "><!-- <input type="image" src="{{icon}}" height="25" weight=25 /> -->
+          <strong>Trails List</strong></h2>
+      </div>
+      <div class="page-body">
+        <!-- <div ng-init='data="flight"' ng-if="userExists"> -->
+        <div id="Login" class="pad-top" ng-show="page==1">
+          <div class="col-md-12 text-center">
+            <div class="col-md-12 text-danger"> User not logged in</div>
+            <button class="btn btn-primary" ng-click="loadTrailsPage()"> Load trails web page</button>
+          </div>
+        </div>
+        <div id="create-trail" class="pad-top" ng-show="page==2">
+          <div id="create-trail-panel" class="col-md-12 panel">
+            <div class = "col-md-12 text-primary text-center panel-heading"><h3>Create Trail Here </h3></div>
+            <div class= "panel-body">
+              <form id="form1" class="form-horizontal">
+                <div class="form-group">
+                  <!-- <label class="control-label col-sm-2" for="trailName">Trail Name:</label> -->
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="trailName" placeholder="Enter a trail name" ng-model="trailName">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <!-- <label class="control-label col-sm-2" for="src">Source:</label> -->
+                  <div class="col-sm-10"> 
+                    <input type="text" class="form-control" id="src" placeholder="Enter Source" ng-model="source">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <!-- <label class="control-label col-sm-2" for="dest">Destination:</label> -->
+                  <div class="col-sm-10"> 
+                    <input type="text" class="form-control" id="dest" placeholder="Enter Destination" ng-model="destination">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="text-center"> 
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" ng-click="createTrail()">Create Trail</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="list-items" class="pad-top" ng-init='data="flight"' ng-show="page==3">
+          <ul class="col-md-12">
+            <li class="col-md-3 active"><a href="#" class="text-danger" ng-click='data="flight"'>Flight</a></li>
+            <li class="col-md-3"><a href="#" class="text-danger" ng-click='data="hotel"'>Hotel</a></li>
+            <li class="col-md-3"><a href="#" class="text-danger" ng-click='data="attraction"'>Attractions</a></li>
+            <li class="col-md-3"><a href="#" class="text-danger" ng-click='data="car"'>Car</a></li> 
+          </ul>
+          <div class="content" ng-show='data==="flight"'>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                <th>AirLine</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Feeling</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="result" ng-repeat="flight in trail.air track by $index">
+                  <td>{{flight.name}}</td>
+                  <td>{{flight.departuretime}}</td>
+                  <td>{{flight.arrivaltime}}</td>
+                  <td>{{flight.duration}}</td>
+                  <td>{{flight.price}}</td>
+                  <td>{{flight.feeling}}</td>
+                  <td><a href="#" width="25" height="25" class="glyphicon glyphicon-trash red" ng-click="removeTrail($index, 'air')"></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="content"  ng-show='data==="hotel"'>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Price</th>
+                  <th>Feeling</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="result" ng-repeat="hotel in trail.hotel track by $index">
+                  <td>{{hotel.name}}</td> 
+                  <td>{{hotel.price}}</td>
+                  <td>{{hotel.feeling}}</td>
+                  <td><a href="#" width="25" height="25" class="glyphicon glyphicon-trash red" ng-click="removeTrail($index, 'hotel')"></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="content" ng-show='data==="attraction"'>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Price</th>
+                  <th>Feeling</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="result" ng-repeat="attraction in trail.attraction track by $index">
+                  <td>{{attraction.name}}</td>
+                  <td>{{attraction.price}}</td>
+                  <td>{{attraction.feeling}}</td>
+                  <td><a href="#" width="25" height="25" class="glyphicon glyphicon-trash red" ng-click="removeTrail($index, 'attraction')"></a></td>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="content" ng-show='data==="car"'>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Price</th>
+                  <th>Feeling</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="result" ng-repeat="car in trail.car track by $index">
+                  <td>{{car.name}}</td>
+                  <td>{{car.price}}</td>
+                  <td>{{car.feeling}}</td>
+                  <td><a href="#" width="25" height="25" class="glyphicon glyphicon-trash red" ng-click="removeTrail($index, 'car')"></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-12 text-center">
+            <button class="btn btn-primary" ng-click="submitTrail()">Submit Trail</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+

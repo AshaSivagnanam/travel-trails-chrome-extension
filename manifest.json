@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+
+  "name": "Travel Trails",
+  "description": "This extension captures user's reviews towards travel",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    { 
+      //"run_at" :"document_idle",
+      "matches" : ["https://flights.makemytrip.com/makemytrip/search*",
+                    "https://cheapfaresindia.makemytrip.com/international/*",
+                    "https://blrl41524:8090/HotelSearch.html",
+                    "https://blrl41524:8091/search.html",
+                    "https://www.viator.com/*/*",
+                    "https://www.goibibo.com/hotels/find-hotels*"
+                  ],
+      "js" : ["dist/js/jquery-2.0.3.min.js", "content_script.js", "dist/js/angular.min.js", "dist/js/bootstrap.min.js"],
+      "css" : ["dist/css/bootstrap.min.css", "iframe.css"]
+    } 
+  ],
+  // "content_security_policy": "script-src 'self' 'unsafe-inline'; object-src 'self'",
+  // "content_security_policy": "script-src 'object-src' 'self' 'sha256-VDNYV5heVlCuscEB1dXU/s9sEuzpCi/F2n02k+rUJbI='",
+  "permissions": [
+    "tabs", "storage", "cookies", "<all_urls>"
+  ],
+  "web_accessible_resources": ["images/*.png", "https://*.facebook.com"]
+}
